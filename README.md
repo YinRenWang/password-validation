@@ -7,7 +7,7 @@ Write a password validation service, meant to be configurable via IoC (using dep
 2. Must be between 5 and 12 characters in length.
 3. Must not contain any sequence of characters immediately followed by the same sequence.
 
-__
+----
 
 # How to work 
 
@@ -23,7 +23,7 @@ The server API document writing by Swagger UI <br>
 The default path is [http://localhost:8080/swagger-ui.html](http://localhot:8080/swagger-ui.html) <br>
 with the visual documentation making it easy for back end implementation and client side consumption. <br>
 
-__
+----
 
 # How to design
 
