@@ -1,5 +1,6 @@
 package dev.michael.core.service;
 
+import dev.michael.core.enums.ApplicableCharactersEnum;
 import dev.michael.core.model.ValidationRequest;
 import dev.michael.core.model.ValidationResponse;
 import dev.michael.util.rule.*;
@@ -16,6 +17,7 @@ public class ValidationServiceImpl implements ValidationService {
 
     @Override
     public ValidationResponse validation(ValidationRequest request) {
+
         // Request params check
         if (request == null || request.getPassword() == null || request.getPassword().isEmpty())
             return new ValidationResponse(false, Arrays.asList("password is null or Empty"));
@@ -37,8 +39,7 @@ public class ValidationServiceImpl implements ValidationService {
     public ValidationServiceImpl() {
         this.validationRules = Arrays.asList(
                 new LengthRule(5, 12),
-                new DigitsRule(),
-                new LowerCaseLetterRule(),
+                new ApplicableCharactersRule(ApplicableCharactersEnum.Digits, ApplicableCharactersEnum.LowerCase),
                 new SequenceNotRepeatRule()
         );
     }
