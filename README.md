@@ -20,7 +20,7 @@ $> mvn spring-boot:run
 ```
 
 The server API document writing by Swagger UI <br>
-The default path is [http://localhost:8080/swagger-ui.html](http://localhot:8080/swagger-ui.html) <br>
+The default path is [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) <br>
 with the visual documentation making it easy for back end implementation and client side consumption. <br>
 
 ----
