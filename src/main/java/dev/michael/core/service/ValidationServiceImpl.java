@@ -1,9 +1,9 @@
 package dev.michael.core.service;
 
-import dev.michael.core.enums.ApplicableCharactersEnum;
 import dev.michael.core.model.ValidationRequest;
 import dev.michael.core.model.ValidationResponse;
 import dev.michael.util.rule.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,20 +15,25 @@ public class ValidationServiceImpl implements ValidationService {
 
     private List<ValidationRule> validationRules;
 
+    @Autowired
+    private LengthRule lengthRule;
+    @Autowired
+    private ApplicableCharactersRule applicableCharactersRule;
+    @Autowired
+    private SequenceNotRepeatRule SequenceNotRepeatRule;
+
     @Override
     public ValidationResponse validation(ValidationRequest request) {
 
         // Request params check
-        if (request == null || request.getPassword() == null || request.getPassword().isEmpty())
+        if (request == null || request.getPassword() == null || request.getPassword().trim().isEmpty())
             return new ValidationResponse(false, Arrays.asList("password is null or Empty"));
         // validationRules check
         List<String> errorMsgs = new ArrayList<>();
-        if (this.validationRules != null && !this.validationRules.isEmpty()) {
-            for (ValidationRule validationRule : this.validationRules) {
-                ValidationResult validationResult = validationRule.validationValue(request.getPassword());
-                if (!validationResult.isValid()) {
-                    errorMsgs.add(validationResult.getErrorMsg());
-                }
+        for (ValidationRule validationRule : this.getValidationRules()) {
+            ValidationResult validationResult = validationRule.validationValue(request.getPassword());
+            if (!validationResult.isValid()) {
+                errorMsgs.add(validationResult.getErrorMsg());
             }
         }
         if (!errorMsgs.isEmpty())
@@ -36,15 +41,13 @@ public class ValidationServiceImpl implements ValidationService {
         return new ValidationResponse(true);
     }
 
-    public ValidationServiceImpl() {
-        this.validationRules = Arrays.asList(
-                new LengthRule(5, 12),
-                new ApplicableCharactersRule(ApplicableCharactersEnum.Digits, ApplicableCharactersEnum.LowerCase),
-                new SequenceNotRepeatRule()
-        );
-    }
-
-    public ValidationServiceImpl(List<ValidationRule> validationRules) {
-        this.validationRules = validationRules;
+    private List<ValidationRule> getValidationRules() {
+        if (validationRules == null) {
+            validationRules = new ArrayList<>();
+            validationRules.add(lengthRule);
+            validationRules.add(applicableCharactersRule);
+            validationRules.add(SequenceNotRepeatRule);
+        }
+        return validationRules;
     }
 }
